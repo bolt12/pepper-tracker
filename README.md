@@ -109,3 +109,19 @@ data HotSauce = HotSauce {
 The only restriction here is the `rating` attribute in both data structures
 where the maximum value is 10 and the `PepperId` should map to an existing
 pepper in the DB.
+
+## Persistent file storage format for phase 1
+
+We'll call every data type defined above a table in our "DB" except the `Form`
+because it's too simple and we're going to see it as a simple enum type. We
+could save everything on one file but that is going to be harder to parse. An
+easier approach is to have one file per table and have a specific parser to each
+one.
+
+The format isn't going to be anything fancy. It'll be used the `Show` instance
+of each type to serialize them and the `Read` instance to read it back. Every
+update will be done in-memory and then saved on the file.
+
+The `Show` instance is easily derived by the compiler, but the parser for the
+`Read` instance will have to be written by hand. That's where `megaparsec`
+comes.

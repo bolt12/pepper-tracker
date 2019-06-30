@@ -4,6 +4,8 @@ module Models () where
 
 import Data.Time
 
+-- (1) Data types - Schema -----
+
 data Pepper = Pepper {
   pepperId :: PepperId,
   name :: String,
@@ -28,4 +30,7 @@ data HotSauce = HotSauce {
   rating :: Int
 }
 
+-- (2) Validations -----
 
+validateRating :: Int -> Bool
+validateRating r = r > 0 && r < 11
