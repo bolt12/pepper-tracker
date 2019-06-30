@@ -72,3 +72,36 @@ going to do. I have a couple of options:
   - Decouple the frontend using Elm (not Haskell) or Reflex (Haskell).
 
 #### Conclusions
+
+## Schema
+
+Here I'll present the schema that I will use in simple Haskell syntax.
+
+As I said in the beginning I want to keep track of which hot peppers I've grown
+and what types of hot sauces I've tried. With this being said:
+
+```Haskell
+data Pepper = Pepper {
+  id :: Int,
+  name :: String,
+  scoville :: Int,
+  planted :: DateTime,
+  firstFruit :: DateTime,
+  rating :: Int,
+  active :: Bool
+}
+
+type Kg = Float
+type Month = Int
+
+data Form = Fermented Month | Raw | Roasted
+
+data HotSauce = HotSauce {
+  id :: Int,
+  peppers :: [(PepperId, Kg, Form)],
+  rating :: Int 
+}
+```
+
+The only restriction here is the `rating` attribute in both data structures
+where the maximum value is 10.
