@@ -82,14 +82,17 @@ and what types of hot sauces I've tried. With this being said:
 
 ```Haskell
 data Pepper = Pepper {
-  id :: Int,
+  pepperId :: Int,
   name :: String,
   scoville :: Int,
-  planted :: DateTime,
-  firstFruit :: DateTime,
+  planted :: UTCTime,
+  firstFruit :: UTCTime,
   rating :: Int,
   active :: Bool
 }
+
+type HotSauceId = Int
+type PepperId = Int
 
 type Kg = Float
 type Month = Int
@@ -97,11 +100,12 @@ type Month = Int
 data Form = Fermented Month | Raw | Roasted
 
 data HotSauce = HotSauce {
-  id :: Int,
+  hotSauceId :: HotSauceId,
   peppers :: [(PepperId, Kg, Form)],
   rating :: Int 
 }
 ```
 
 The only restriction here is the `rating` attribute in both data structures
-where the maximum value is 10.
+where the maximum value is 10 and the `PepperId` should map to an existing
+pepper in the DB.
