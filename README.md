@@ -30,8 +30,6 @@ using an in-memory DB with a file persistent storage, for the data layer;
 
 The things to learn with this phase are:
 
-  - Parsing of the file persistent storage, with `megaparsec`;
-
   - Learn the hassles of doing everything in-memory without the abstraction/help
     of database;
 
