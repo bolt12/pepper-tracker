@@ -1,10 +1,7 @@
 module Models.Pepper where
 
 import Models.Entity
-import Models.Utils
 import Data.Time
-import Text.Megaparsec
-import Text.Megaparsec.Char
 
 -- (1) Type Definitions -----
 
@@ -20,6 +17,7 @@ data Pepper = Pepper {
   active :: Bool
 } deriving (Show, Read)
 
+-- Constructor alias
 pepper = Pepper
 
 instance Entity Pepper where

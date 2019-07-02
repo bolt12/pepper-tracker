@@ -1,10 +1,7 @@
 module Models.HotSauce where
 
 import Models.Entity
-import Models.Utils
 import Models.Pepper
-import Text.Megaparsec
-import Text.Megaparsec.Char
 
 type HotSauceId = Int
 
@@ -20,6 +17,7 @@ data HotSauce = HotSauce {
   rating :: Int
 } deriving (Show, Read)
 
+-- Constructor alias
 hotSauce = HotSauce
 
 instance Entity HotSauce where
