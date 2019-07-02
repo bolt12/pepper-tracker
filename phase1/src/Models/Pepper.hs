@@ -12,7 +12,7 @@ data Pepper = Pepper {
   name :: String,
   scoville :: Int,
   planted :: UTCTime,
-  firstFruit :: UTCTime,
+  firstFruit :: Maybe UTCTime,
   rating :: Int,
   active :: Bool
 } deriving (Show, Read)
@@ -24,6 +24,9 @@ instance Entity Pepper where
     getId = pepperId
 
 -- (3) Validations -----
+
+validatePepper :: Pepper -> Bool
+validatePepper p = validateRating (rating p)
 
 validateRating :: Int -> Bool
 validateRating r = r > 0 && r < 11
