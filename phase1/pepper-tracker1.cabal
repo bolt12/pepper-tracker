@@ -19,12 +19,14 @@ build-type:          Simple
 extra-source-files:  CHANGELOG.md
 
 executable pepper-tracker1
-  main-is:             Server.hs
-  other-modules:       Models,
-                       DB, 
+  main-is:             Main.hs
+  other-modules:       AppState,
+                       DB,
+                       Models,
                        Models.Entity,
                        Models.HotSauce,
-                       Models.Pepper
+                       Models.Pepper,
+                       Routes
   -- other-extensions:
   build-depends:       base >=4.12 && <4.13,
                        directory,

@@ -9,13 +9,13 @@ type Kg = Float
 type Month = Int
 
 data Form = Fermented Month | Raw | Roasted
-          deriving (Show, Read)
+          deriving (Eq, Show, Read)
 
 data HotSauce = HotSauce {
   hotSauceId :: HotSauceId,
   peppers :: [(PepperId, Kg, Form)],
   rating :: Int
-} deriving (Show, Read)
+} deriving (Eq, Show, Read)
 
 -- Constructor alias
 hotSauce = HotSauce

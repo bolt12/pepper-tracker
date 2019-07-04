@@ -15,7 +15,7 @@ data Pepper = Pepper {
   firstFruit :: Maybe UTCTime,
   rating :: Int,
   active :: Bool
-} deriving (Show, Read)
+} deriving (Eq, Show, Read)
 
 -- Constructor alias
 pepper = Pepper

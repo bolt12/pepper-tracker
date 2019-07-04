@@ -13,13 +13,19 @@ getEntity :: Entity a => Int -> Table a -> Maybe a
 getEntity id = listToMaybe . filter ((== id) . getId)
 
 -- Insert an entity in a Table
-insert :: Entity a => a -> Table a -> Table a
-insert a t =
+insertEntity :: Entity a => a -> Table a -> Table a
+insertEntity a t =
   either ((:) a) id . maybe (Left t) (Right . const t) $ getEntity (getId a) t
 
+updateEntity :: Entity a => a -> Table a -> Table a
+updateEntity _ [] = []
+updateEntity a (h:t) 
+  | getId a == getId h = a : t
+  | otherwise = h : updateEntity a t
+
 -- Delete an id from a Table
-delete :: Entity a => Int -> Table a -> (Maybe a, Table a)
-delete id =
+deleteEntity :: Entity a => Int -> Table a -> (Maybe a, Table a)
+deleteEntity id =
   (,) <$> listToMaybe . filter ((== id) . getId) <*> filter ((/= id) . getId)
 
 -- Serialize a Table into a file
