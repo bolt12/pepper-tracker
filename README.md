@@ -39,6 +39,24 @@ The things to learn with this phase are:
 
 #### Conclusions
 
+- To run the DB in memory I needed to define all the CRUD operations on the
+  datatypes (Tables). Since the project has very little functionalities I ended
+  up by just keeping it simple but I can see how this could scale with a larger
+  problem domain. It's not worth it to implement your own query system. Just use
+  a standard DB.
+
+- To be able to run it in memory with scotty was easy by following an example
+  from the docs. It uses a ScottyT which takes an monadic action and executes it
+  everytime a request comes. This monadic action just runs one time per action so the state
+  would be lost with a standard State monad; the trick was to use TVar from STM
+  that allocates a shared memory location that support atomic memory
+  transactions and save the ReaderT in that location. The monadic action simply
+  reads the value of the TVar. It was a very nice and simple exercise to see STM
+  in action.
+
+- Scotty is very simple and intuitive so designing the route endpoints was
+  also very simple.
+
 ### Second phase
 
 The second phase aims to change the data layer and use a database management
