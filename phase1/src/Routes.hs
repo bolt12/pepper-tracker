@@ -42,7 +42,8 @@ getPeppersRouteS = do
 
 addPepperRouteS :: (ScottyError e) => ActionT e WebM ()
 addPepperRouteS = do
-  id         <- webM $ gets getPepperId
+  ps <- webM $ gets getPeppers
+  let id = if null ps then 0 else maximum (map MP.pepperId ps) + 1
   name       <- fromString <$> param "name" `rescue` const next
   scoville   <- param "scoville" `rescue` const next
   planted    <- param "planted" `rescue` const next
@@ -58,9 +59,7 @@ addPepperRouteS = do
     else do
       ps <- webM $ gets getPeppers
       let ps' = insertEntity pp ps
-      webM $ modify $ \st -> st { getPeppers = ps', getPepperId = id + 1 }
-      liftIO $ persist db1 ps'
-      redirect "/"
+       in saveAndPersistPeppers ps'
   where format = "%F" -- %Y-%m-%d
 
 updatePepperRouteS :: (ScottyError e) => ActionT e WebM ()
@@ -109,5 +108,6 @@ deletePepperRouteS = do
 saveAndPersistPeppers :: (ScottyError e) => Table MP.Pepper -> ActionT e WebM ()
 saveAndPersistPeppers ps = do
   webM $ modify $ \st -> st { getPeppers = ps }
-  liftIO $ persist db1 ps
+  state <- webM getSt
+  liftIO $ persist dbFile state
   redirect "/"

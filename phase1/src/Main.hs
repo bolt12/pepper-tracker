@@ -14,7 +14,7 @@ import           Data.Text.Lazy                 ( Text )
 
 main :: IO ()
 main = do
-  def' <- def
+  def' <- load dbFile
   sync <- newTVarIO def'
   -- 'runActionToIO' is called once per action.
   let runActionToIO m = runReaderT (runWebM m) sync
