@@ -35,6 +35,7 @@ executable pepper-tracker1
                        mtl,
                        wai-extra,
                        text,
-                       scotty
+                       scotty,
+                       lucid
   hs-source-dirs:      src
   default-language:    Haskell2010

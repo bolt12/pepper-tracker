@@ -14,7 +14,7 @@ data Form = Fermented Month | Raw | Roasted
 data HotSauce = HotSauce {
   hotSauceId :: HotSauceId,
   peppers :: [(PepperId, Kg, Form)],
-  rating :: Int
+  hRating :: Int
 } deriving (Eq, Show, Read)
 
 -- Constructor alias
