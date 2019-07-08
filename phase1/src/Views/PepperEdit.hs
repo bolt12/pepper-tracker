@@ -24,18 +24,18 @@ pepper2Html p =
        form_ [method_ "post", action_ (fromString $ "/pepperEdit/" ++ show (pepperId p))] $ do
          label_ $ do
            "Name: "
-           input_ [name_ "name"]
+           input_ [name_ "name", placeholder_ (fromString $ pName p)]
          label_ $ do
            "Scoville: "
-           input_ [name_ "scoville", value_ "-1"]
+           input_ [name_ "scoville", value_ "-1", placeholder_ (fromString . show $ scoville p)]
          label_ $ do
            "Planted: "
-           input_ [name_ "planted"]
+           input_ [name_ "planted", placeholder_ (fromString . show $ planted p)]
          label_ $ do
            "First fruit: "
-           input_ [name_ "first fruit"]
+           input_ [name_ "first fruit", placeholder_ "YY-MM-DD"]
          label_ $ do
            "rating: "
-           input_ [name_ "rating", value_ "-1"]
+           input_ [name_ "rating", value_ "-1", placeholder_ (fromString . show $ pRating p)]
          input_ [type_ "submit", value_ "Edit pepper"]
      else errorPage "Pepper not found!"

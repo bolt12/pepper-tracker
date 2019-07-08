@@ -62,6 +62,16 @@ The things to learn with this phase are:
   [link](https://chrisdone.com/posts/lucid/) explains better the problems with
   `blaze` and shows how `lucid` fixes them.
 
+- The first phase is a little rough around the edges mainly because it is very
+  tedious to keep up with all the possible CRUD operations + supporting Views.
+  With this being said, I conclude that with such a simple example, working with
+  an in-memory DB and doing all the dirty work is painful and bug prone. The
+  `lucid` HTML generation is fun to do but since it supports limited interaction
+  with javascript it does not allow to have an user-friendly interface.
+  Regrading `scotty`, it's very pleasant to work with and I should have
+  organized the routes a little better since the number of endpoints can scale
+  when doing server-side rendering. 
+
 ### Second phase
 
 The second phase aims to change the data layer and use a database management

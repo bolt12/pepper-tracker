@@ -29,7 +29,7 @@ pepper2Html p =
          li_ . toHtml $ ("Name: " ++ pName p)
          li_ . toHtml $ ("Scoville: " ++ show (scoville p))
          li_ . toHtml $ ("Planted: " ++ show (planted p))
-         li_ . toHtml $ ("First fruit: " ++ show (planted p))
+         li_ . toHtml $ ("First fruit: " ++ show (firstFruit p))
          li_ . toHtml $ ("Rating: " ++ show (pRating p))
        button_ [onclick_ (fromString $ "window.location.href=" ++ "'" ++ edit ++ "'")] "Edit"
        button_ [onclick_ (fromString $ "window.location.href="++ "'" ++ delete ++ "'")] "Delete"

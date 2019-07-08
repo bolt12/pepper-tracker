@@ -187,7 +187,8 @@ deletePepperRouteS = do
 getHotSaucesRouteS :: (ScottyError e) => ActionT e WebM ()
 getHotSaucesRouteS = do
   hs <- webM $ gets getHotSauces
-  html . renderText $ showHotSauces hs
+  ps <- webM $ gets getPeppers
+  html . renderText $ showHotSauces hs ps
 
 getHotSauceAddS :: (ScottyError e) => ActionT e WebM ()
 getHotSauceAddS = html . renderText $ showHotSauceAdd

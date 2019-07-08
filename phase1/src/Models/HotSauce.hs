@@ -9,9 +9,8 @@ import Data.List (sort)
 type HotSauceId = Int
 
 type Kg = Float
-type Month = Int
 
-data Form = Fermented Month | Raw | Roasted
+data Form = Fermented | Raw | Roasted
           deriving (Eq, Show, Read)
 
 data HotSauce = HotSauce {
