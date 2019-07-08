@@ -9,7 +9,7 @@ showPepperAdd = doctypehtml_ $ do
   head_ $
     title_ "Pepper Tracker"
   body_ $ do 
-    h2_ "Pepper Edit"
+    h2_ "Pepper Add"
     div_ pepperForm
 
 pepperForm :: Html ()

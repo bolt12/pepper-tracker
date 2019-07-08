@@ -1,1 +1,1 @@
-AppState {getPeppers = [], getHotSauces = []}
+AppState {getPeppers = [Pepper {pepperId = 0, pName = "asdds", scoville = 0, planted = 2019-04-20 00:00:00 UTC, firstFruit = Nothing, pRating = 0, active = True}], getHotSauces = [HotSauce {hotSauceId = 0, hName = "Serrano Hot sauce", peppers = [], hRating = 1}]}

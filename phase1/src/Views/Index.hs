@@ -13,4 +13,4 @@ index = doctypehtml_ $ do
     h4_ "Choose page"
     div_ $ do
       button_ [onclick_ "window.location='http://localhost:3000/peppers'"] "Peppers"
-      button_ [onclick_ "window.location='http://localhost:3000/hotSauces'"] "Hot Sauces"
+      button_ [onclick_ "window.location='http://localhost:3000/hotsauces'"] "Hot Sauces"

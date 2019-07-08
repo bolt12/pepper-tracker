@@ -14,6 +14,11 @@ import Views.Peppers
 import Views.PepperAdd
 import Views.PepperEdit
 import Views.PepperDelete
+import Views.HotSauces
+import Views.HotSauceAdd
+import Views.HotSauceAddPepper
+import Views.HotSauceEdit
+import Views.HotSauceDelete
 import Views.ErrorPage
 
 import           Control.Monad.Reader
@@ -27,6 +32,7 @@ routes :: ScottyError e => ScottyT e WebM ()
 routes = do
   get "/" showIndex
 
+-- Pepper Routes
   get "/peppers" getPeppersRouteS
   get "/peppers" (errorPage' "No peppers currently...")
 
@@ -47,6 +53,34 @@ routes = do
 
   post "/pepperDelete/:id" deletePepperRouteS
   post "/pepperDelete/:id" (errorPage' "Pepper not found!")
+
+-- HotSauce Routes
+  get "/hotsauces" getHotSaucesRouteS
+  get "/hotsauces" (errorPage' "No hot sauces currently...")
+
+  get "/hotsauceAdd" getHotSauceAddS
+  get "/hotsauceAdd" (errorPage' "Failed!")
+
+  get "/hotsauceEdit/:id" getHotSauceEditS
+  get "/hotsauceEdit/:id" (errorPage' "HotSauce not found!")
+
+  get "/hotsauceAddPepper/:id" getHotSauceAddPepperS
+  get "/hotsauceAddPepper/:id" (errorPage' "Failed!")
+
+  get "/hotsauceDelete/:id" getHotSauceDeleteS
+  get "/hotsauceDelete/:id" (errorPage' "HotSauce not found!")
+
+  post "/hotsauce" addHotSauceRouteS
+  post "/hotsauce" (errorPage' "Failed!")
+
+  post "/hotsauceEdit/:id" updateHotSauceRouteS
+  post "/hotsauceEdit/:id" (errorPage' "HotSauce not found!")
+
+  post "/hotsauceAddPepper/:hsId/" addHotSaucePepperS
+  post "/hotsauceAddPepper/:hsId/" (errorPage' "Failed!")
+
+  post "/hotsauceDelete/:id" deleteHotSauceRouteS
+  post "/hotsauceDelete/:id" (errorPage' "HotSauce not found!")
 
 showIndex :: (ScottyError e) => ActionT e WebM ()
 showIndex = html . renderText $ index
@@ -126,7 +160,7 @@ updatePepperRouteS = do
         firstFruit' = parseTimeM True defaultTimeLocale format firstFruit
         planted'    = parseTimeM True defaultTimeLocale format planted
         (Just ppOg) = ppOgM
-        ppOg1       = if null name then ppOg else ppOg { name = name }
+        ppOg1       = if null name then ppOg else ppOg { pName = name }
         ppOg2 =
           if scoville < 0 then ppOg1 else ppOg1 { scoville = scoville }
         ppOg4 = if firstFruit' == Nothing
@@ -149,6 +183,109 @@ deletePepperRouteS = do
   let (_, ps') = deleteEntity id ps
   saveAndPersistPeppers ps'
 
+-- Get HotSauces Success endpoint
+getHotSaucesRouteS :: (ScottyError e) => ActionT e WebM ()
+getHotSaucesRouteS = do
+  hs <- webM $ gets getHotSauces
+  html . renderText $ showHotSauces hs
+
+getHotSauceAddS :: (ScottyError e) => ActionT e WebM ()
+getHotSauceAddS = html . renderText $ showHotSauceAdd
+
+getHotSauceEditS :: (ScottyError e) => ActionT e WebM ()
+getHotSauceEditS = do
+  id <- param "id" `rescue` const next
+  hs <- webM $ gets getHotSauces
+  let hsOgM = getEntity id hs
+  if hsOgM == Nothing 
+     then next
+     else 
+     let (Just h) = hsOgM
+      in html . renderText $ showHotSauceEdit h
+
+getHotSauceAddPepperS :: (ScottyError e) => ActionT e WebM ()
+getHotSauceAddPepperS = do
+  id <- param "id" `rescue` const next
+  hs <- webM $ gets getHotSauces
+  ps <- webM $ gets getPeppers
+  let hsOgM = getEntity id hs
+  if hsOgM == Nothing 
+     then next
+     else 
+     let (Just h) = hsOgM
+      in html . renderText $ showHotSauceAddPepper h ps
+
+getHotSauceDeleteS :: (ScottyError e) => ActionT e WebM ()
+getHotSauceDeleteS = do
+  id <- param "id" `rescue` const next
+  hs <- webM $ gets getHotSauces
+  let hsOgM = getEntity id hs
+  if hsOgM == Nothing 
+     then next
+     else 
+     let (Just h) = hsOgM
+      in html . renderText $ showHotSauceDelete h
+
+addHotSauceRouteS :: (ScottyError e) => ActionT e WebM ()
+addHotSauceRouteS = do
+  hs <- webM $ gets getHotSauces
+  let id = if null hs then 0 else maximum (map hotSauceId hs) + 1
+  name     <- param "name" `rescue` const next
+  rating     <- param "rating" `rescue` const next
+  let hotsauce = hotSauce id name [] rating
+  if not (validateHotSauce hotsauce [])
+    then next
+    else do
+      ps <- webM $ gets getHotSauces
+      let hs' = insertEntity hotsauce hs
+       in saveAndPersistHotSauces hs'
+
+addHotSaucePepperS :: (ScottyError e) => ActionT e WebM ()
+addHotSaucePepperS = do
+  hsId     <- param "hsId" `rescue` const next
+  pId     <- param "pId" `rescue` const next
+  kg     <- param "kg" `rescue` const next
+  form     <- read <$> param "form" `rescue` const next
+  pps <- webM $ gets getPeppers
+  hs         <- webM $ gets getHotSauces
+  let p = getEntity pId pps
+      h = getEntity hsId hs
+  if p /= Nothing && h /= Nothing
+     then
+      let
+        (Just hsOg) = h
+        pps2 = (pId, kg, form) : peppers hsOg
+        hsOg1 = hsOg { peppers = pps2 }
+        hs'   = updateEntity hsOg1 hs
+      in
+        saveAndPersistHotSauces hs'
+     else next
+
+updateHotSauceRouteS :: (ScottyError e) => ActionT e WebM ()
+updateHotSauceRouteS = do
+  id         <- param "id" `rescue` const next
+  name       <- fromString <$> param "name" `rescue` const (return "")
+  rating     <- param "rating" `rescue` const (return (-1))
+  hs         <- webM $ gets getHotSauces
+  let hsOgM = getEntity id hs
+  if hsOgM == Nothing
+    then next
+    else
+      let
+        (Just hsOg) = hsOgM
+        hsOg1       = if null name then hsOg else hsOg { hName = name }
+        hsOg2 = if rating < 0 then hsOg1 else hsOg1 { hRating = rating }
+        hs'   = updateEntity hsOg2 hs
+      in
+        saveAndPersistHotSauces hs'
+
+deleteHotSauceRouteS :: (ScottyError e) => ActionT e WebM ()
+deleteHotSauceRouteS = do
+  id <- param "id" `rescue` const next
+  ps <- webM $ gets getHotSauces
+  let (_, ps') = deleteEntity id ps
+  saveAndPersistHotSauces ps'
+
 -- Auxiliar functions
 
 saveAndPersistPeppers :: (ScottyError e) => Table Pepper -> ActionT e WebM ()
@@ -157,3 +294,10 @@ saveAndPersistPeppers ps = do
   state <- webM getSt
   liftIO $ persist dbFile state
   redirect "/peppers"
+
+saveAndPersistHotSauces :: (ScottyError e) => Table HotSauce -> ActionT e WebM ()
+saveAndPersistHotSauces hs = do
+  webM $ modify $ \st -> st { getHotSauces = hs }
+  state <- webM getSt
+  liftIO $ persist dbFile state
+  redirect "/hotsauces"

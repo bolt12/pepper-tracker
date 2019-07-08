@@ -9,7 +9,7 @@ type PepperId = Int
 
 data Pepper = Pepper {
   pepperId :: PepperId,
-  name :: String,
+  pName :: String,
   scoville :: Int,
   planted :: UTCTime,
   firstFruit :: Maybe UTCTime,

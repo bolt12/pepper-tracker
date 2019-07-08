@@ -26,7 +26,7 @@ pepper2Html p =
   if active p 
      then div_ $ do 
        ul_ $ do
-         li_ . toHtml $ ("Name: " ++ name p)
+         li_ . toHtml $ ("Name: " ++ pName p)
          li_ . toHtml $ ("Scoville: " ++ show (scoville p))
          li_ . toHtml $ ("Planted: " ++ show (planted p))
          li_ . toHtml $ ("First fruit: " ++ show (planted p))
