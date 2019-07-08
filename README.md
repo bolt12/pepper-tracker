@@ -26,7 +26,7 @@ Future work will focus on improving the solutions by refactoring.
 
 The first phase is the most simple, naive way of doing things. It'll be done by
 using an in-memory DB with a file persistent storage, for the data layer;
-`scotty` for the webserver and `blaze` on the frontend.
+`scotty` for the webserver and ~~`blaze`~~ `lucid` on the frontend.
 
 The things to learn with this phase are:
 
@@ -56,6 +56,11 @@ The things to learn with this phase are:
 
 - Scotty is very simple and intuitive so designing the route endpoints was
   also very simple.
+
+- I switched from `blaze` to `lucid` for HTML generation because I found
+  `blaze` a little rough around the edges and was not very friendly to use. This
+  [link](https://chrisdone.com/posts/lucid/) explains better the problems with
+  `blaze` and shows how `lucid` fixes them.
 
 ### Second phase
 
