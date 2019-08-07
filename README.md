@@ -35,7 +35,7 @@ The things to learn with this phase are:
 
   - How to use `scotty`, nothing fancy here;
 
-  - How to use `blaze`, and how it interacts with `scotty`.
+  - How to use ~~`blaze`~~ `lucid`, and how it interacts with `scotty`.
 
 #### Conclusions
 
@@ -44,6 +44,9 @@ The things to learn with this phase are:
   up by just keeping it simple but I can see how this could scale with a larger
   problem domain. It's not worth it to implement your own query system. Just use
   a standard DB.
+  
+- It would be a better idea to use the `lens`library to reduce a lot of record 
+  manipulation code.
 
 - To be able to run it in memory with scotty was easy by following an example
   from the docs. It uses a ScottyT which takes an monadic action and executes it
@@ -63,11 +66,11 @@ The things to learn with this phase are:
   `blaze` and shows how `lucid` fixes them.
 
 - The first phase is a little rough around the edges mainly because it is very
-  tedious to keep up with all the possible CRUD operations + supporting Views.
+  tedious to keep up with all the possible CRUD operations (`lens` could help) + supporting Views.
   With this being said, I conclude that with such a simple example, working with
   an in-memory DB and doing all the dirty work is painful and bug prone. The
-  `lucid` HTML generation is fun to do but since it supports limited interaction
-  with javascript it does not allow to have an user-friendly interface.
+  `lucid` HTML generation is fun to do but, since it supports limited interaction
+  with javascript it does not allow to have a more user-friendly interface.
   Regrading `scotty`, it's very pleasant to work with and I should have
   organized the routes a little better since the number of endpoints can scale
   when doing server-side rendering. 
@@ -81,10 +84,12 @@ the DB and hopefully everything relevant will be taken care of by them.
 The things to learn with this phase are:
 
   - How to use `persistent` + `equeleto` and their limitations. That is see if
-    they are fit to this type of projects; I don't know how will they handle
+    they are fit to this type of projects; I don't know how they will handle
     foreign keys, probably because I haven't read the docs...;
+    
+  - Study other framework/library alternatives for DB;
 
-  - How easy it is to refactor the first phase code wrt the data layer;
+  - How easy it is to refactor the first phase code w.r.t. the data layer;
 
 #### Conclusions
 
@@ -153,6 +158,4 @@ The format isn't going to be anything fancy. It'll be used the `Show` instance
 of each type to serialize them and the `Read` instance to read it back. Every
 update will be done in-memory and then saved on the file.
 
-The `Show` instance is easily derived by the compiler, but the parser for the
-`Read` instance will have to be written by hand. That's where `megaparsec`
-comes.
+The `Show`/`Read` instance is easily derived by the compiler.
