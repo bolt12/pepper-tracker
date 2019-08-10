@@ -43,9 +43,9 @@ The things to learn with this phase are:
   datatypes (Tables). Since the project has very little functionalities I ended
   up by just keeping it simple but I can see how this could scale with a larger
   problem domain. It's not worth it to implement your own query system. Just use
-  a standard DB.
+  a standard DB interface.
   
-- It would be a better idea to use the `lens`library to reduce a lot of record 
+- It would be a better idea to use the `lens` library to reduce a lot of record 
   manipulation code.
 
 - To be able to run it in memory with scotty was easy by following an example
@@ -78,14 +78,13 @@ The things to learn with this phase are:
 ### Second phase
 
 The second phase aims to change the data layer and use a database management
-system like Postgresql. It will use `persistent` + `esqueleto` to interface with
+system like Postgresql. It will use `data-basic` to interface with
 the DB and hopefully everything relevant will be taken care of by them.
 
 The things to learn with this phase are:
 
-  - How to use `persistent` + `equeleto` and their limitations. That is see if
-    they are fit to this type of projects; I don't know how they will handle
-    foreign keys, probably because I haven't read the docs...;
+  - How to use `data-basic` and its limitations. That is, see if
+    they it's fit to this type of projects; 
     
   - Study other framework/library alternatives for DB;
 
@@ -133,7 +132,7 @@ type PepperId = Int
 type Kg = Float
 type Month = Int
 
-data Form = Fermented Month | Raw | Roasted
+data Form = Fermented | Raw | Roasted
 
 data HotSauce = HotSauce {
   hotSauceId :: HotSauceId,
@@ -149,10 +148,7 @@ pepper in the DB.
 ## Persistent file storage format for phase 1
 
 We'll call every data type defined above a table in our "DB" except the `Form`
-because it's too simple and we're going to see it as a simple enum type. We
-could save everything on one file but that is going to be harder to parse. An
-easier approach is to have one file per table and have a specific parser to each
-one.
+because it's too simple and we're going to see it as a simple enum type. 
 
 The format isn't going to be anything fancy. It'll be used the `Show` instance
 of each type to serialize them and the `Read` instance to read it back. Every
